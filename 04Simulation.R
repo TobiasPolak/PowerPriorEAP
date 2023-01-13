@@ -340,17 +340,17 @@ runSimulation <- function(setting, mainFolder) {
   res.type.I.mean <- cbind(setting.vector, res.type.I.mean)
   RMSE.mean <- cbind(setting.vector, RMSE.mean)
   
-  ### Create older to store results
+  mainDir <- mainFolder # Assign mainFolder to mainDir
+  mainDir <- "C:/Users/31612/Documents/R/PowerPriorPropensity/Simulations" # Re-assign mainDir to specific file path
+  folder_name <- paste0('Simulation_', start.date) # Create folder_name variable with "Simulation_" and start.date
+  subDir <- paste0("/", folder_name) # Create subDir variable with subfolder name
+  dir.create(file.path(mainDir, subDir), showWarnings = FALSE) # Create new directory
+  subfolder <- paste0('/',setting$title) # Create subfolder variable with setting$title
+  dir.create(file.path(mainDir, subDir, subfolder), showWarnings = FALSE) # Create subfolder within directory
   
-  mainDir <- mainFolder
-  mainDir <- "C:/Users/31612/Documents/R/PowerPriorPropensity/Simulations"
-  folder_name <- paste0('Simulation_', start.date)
-  subDir <- paste0("/", folder_name)
-  dir.create(file.path(mainDir, subDir), showWarnings = FALSE)
-  subfolder <- paste0('/',setting$title)
-  dir.create(file.path(mainDir, subDir, subfolder), showWarnings = FALSE)
-  setwd(file.path(file.path(mainDir, subDir, subfolder)))
-  ### Store results 
+  setwd(file.path(file.path(mainDir, subDir, subfolder))) # Set working directory to subfolder
+  
+  # Plot and save Type I error and RMSE CSV
   
   write.csv2( 
     res.type.I.mean,
@@ -361,6 +361,8 @@ runSimulation <- function(setting, mainFolder) {
     RMSE.mean,
     paste0(start.date, '_RMSE.mean_', setting$title, '.csv')
   )
+  
+  # Plot and save Type I error and RMSE graphs
   
   if (plotYN){
     plot.df.type.I <-
@@ -401,21 +403,21 @@ runSimulation <- function(setting, mainFolder) {
     ggsave(filename = paste0(setting$title, " Simulation RMSE", ".png"), device = 'png', dpi = 600, width = 30, height = 20, units = "cm")
   } else{}
   
-  end.time <- Sys.time()
-  end.date <- Sys.Date()
-  timespent <- end.time - start.time
-  print(timespent)
+  # Record end time, calculate time spent, and save data
+  end.time <- Sys.time()  # Record the current time and assign it to end.time variable
+  end.date <- Sys.Date()  # Record the current date and assign it to end.date variable
+  timespent <- end.time - start.time  # Calculate the time spent by subtracting start.time from end.time
+  print(timespent)  # Print the time spent
   if (save_all){
-    saveRDS(listRMSE, file=paste0(start.date,'_', setting$title, '_' , setting$variable ,"listRMSE.RData"))
-    saveRDS(listType, file=paste0(start.date,'_', setting$title, '_' , setting$variable ,"listRMSE.RData"))
-    saveRDS(rates, file=paste0(start.date,'_', setting$title, '_' , setting$variable ,"rates.RData"))
-    save.image(file = paste0(start.date, setting$variable ,".RData"))
+    saveRDS(listRMSE, file=paste0(start.date,'_', setting$title, '_' , setting$variable ,"listRMSE.RData"))  # Save listRMSE variable in .RData format
+    saveRDS(listType, file=paste0(start.date,'_', setting$title, '_' , setting$variable ,"listRMSE.RData"))  # Save listType variable in .RData format
+    saveRDS(rates, file=paste0(start.date,'_', setting$title, '_' , setting$variable ,"rates.RData"))  # Save rates variable in .RData format
+    save.image(file = paste0(start.date, setting$variable ,".RData"))  # Save the current R session in .RData format
   }
-  information_path <- paste0(start.date,'_', setting$title, '_', 'information.txt')
-  write.table(setting, file = information_path)
-  write.table(paste('Start time: ', start.time, 'End time: ', end.time, 'Time spent: ', timespent), file = information_path, append=TRUE, col.names = FALSE)
-  write.table(paste('Error Wang: ', errorWang/n.sims), file = information_path, append=TRUE, col.names = FALSE)
-  
+  information_path <- paste0(start.date,'_', setting$title, '_', 'information.txt')  # Create a variable for the information file path
+  write.table(setting, file = information_path)  # Write setting variable to the information file
+  write.table(paste('Start time: ', start.time, 'End time: ', end.time, 'Time spent: ', timespent), file = information_path, append=TRUE, col.names = FALSE)  # Append the start time, end time and time spent to the information file
+  write.table(paste('Error Wang: ', errorWang/n.sims), file = information_path, append=TRUE, col.names = FALSE)  # Append the Error Wang value to the information file
 }
 ###########################
 ###########################
