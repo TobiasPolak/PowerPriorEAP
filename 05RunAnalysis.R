@@ -1,13 +1,15 @@
-rm(list=ls())
-closeAllConnections()
-setwd("C:/Users/31612/Documents/R/PowerPriorPropensity")
-source("01LoadInstall.R")
-source("02DataSimulation.R")
-source("03Estimation.R")
-source("04Simulation.R")
+# Clear the environment, close all connections, set working directory and source necessary files
+rm(list=ls()) # Clear all objects in the environment
+closeAllConnections() # Close all open connections
+setwd("C:/Users/31612/Documents/R/PowerPriorPropensity") # Set the working directory
+source("01LoadInstall.R") # Source the Load and Installation R Script
+source("02DataSimulation.R") # Source the Data Simulation R Script
+source("03Estimation.R") # Source the Estimation R Script
+source("04Simulation.R") # Source the Simulation R Script
 
-mainFolder <- "C:/Users/31612/Documents/R/PowerPriorPropensity/Simulations"
+mainFolder <- "C:/Users/31612/Documents/R/PowerPriorPropensity/Simulations" # Set main folder for simulation results
 
+# Define several settings for the simulation
 setting1 <- list(
   n.settings = 7,
   rct.size = 800,
